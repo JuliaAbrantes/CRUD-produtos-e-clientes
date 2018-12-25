@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PRODUTOS</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+  <style type="text/css">
+ table {
+width: 900px;
+border-collapse: collapse;
+height: 400px;
+margin-left: 10%;
+}
+
+
+th {
+background-color: rgba(102,205,170, 0.3);
+font-size: 20px;
+color:black;
+padding-left:4px;
+padding-right:4px;
+border-bottom:solid 1px #CCC;
+height:5%;
+padding-right:5px;
+
+  }
+tr:nth-child(odd) {
+    background-color:#F3F3F3;
+}
+
+tr:nth-child(even) {
+    background-color:#FFF;
+
+}
+
+tr, td {
+height:5%;
+padding-left:4px;
+padding-right:2px;
+font-family:Verdana, Geneva, sans-serif;
+font-size:20px;
+
+}
+tr:hover {
+
+ color:#FFF;
+}
+    tr:hover {background-color:#9C9C9C;}
+ 
+    }
+
+		 #conteudo1{
+			text-align: center;
+			width: 15%;
+			height:auto;
+		}
+		
+		
+	#Menu{
+		width: 100%;
+		height: 50%;
+		background-image:url("fun.jpg");		}
+		
+	 h1{
+     color: white;
+     text-align: left;
+	   font-size: 50px;
+    font-family:Noto Mono;
+     margin-top: -2%;
+    }
+  
+   #inc, #edit{
+      display: none;
+    }
+	 #inc{
+      display: none;
+      position: fixed;
+      font-family:Noto Mono;
+      top: 5%;
+      width: 70%;
+      height: 90%;
+      left: 15%;
+     background-color: rgba(190,190,190,0.9);
+      text-align: center;
+	  font-size: 15px;;
+	  color: black;
+    border-radius:10px;
+    }
+	
+	 #edit{
+      display: none;
+      position: fixed;
+      font-family:Noto Mono;
+      top: 5%;
+      width: 70%;
+      height: 90%;
+      left: 15%;
+     background-color: rgba(190,190,190,0.9);
+      text-align: center;
+	  font-size: 35px;;
+	  color: black;
+    border-radius:10px;
+    }
+	
+	#inc, #edit h3{
+	font-size: 30px;
+	}
+	
+	
+	 #Menu button{
+	 font-size: 30px;
+	 margin-left: 15%;
+   font-family:Noto Mono;
+   color: black;
+   background-color:#b1cbbb;
+  border-radius:20px;
+    box-shadow:6px 5px black;
+  transition: background-color;
+    }
+	
+	 #Paginacao{
+	 margin-right: 90%;
+	 margin-top: 5%;
+	  background-image:url("fun.jpg");
+	  width: 100%;
+	  text-align: center;
+    }
+	
+	#Paginacao button{
+	background-color: #9C9C9C;
+  color: black;
+  font-size: 20px;
+  border-radius:10px;
+  font-family:Noto Mono;
+  
+	}
+	
+	img{
+	width: 3%;
+	height: 10%;
+	margin-top: 4%;
+	}
+	
+	#Menu h3{
+	font-size: 65px;
+	color: black;
+  font-family:Noto Mono;
+	text-align: center;
+	margin-top: -5%;
+	margin-left: 20%;
+	}
+	
+	#Numero{
+      background-color: white;
+      padding: 1px 10px;
+      font-weight: bold;
+    }
+	
+ .bu{
+  margin-left: 75%;
+  margin-top: 5%;
+  border-radius: 20%; 
+  font-size: 30px;
+  color: black;
+  font-family:Noto Mono;
+  background-color:#b1cbbb;
+  border-radius:20px;
+    box-shadow:6px 5px black;
+  transition: background-color;
+    }
+
+
+  
+  .bu:hover{
+  background-color: #deeaee;
+  
+  }
+  #Menu button:hover{
+    background-color: #deeaee;
+  }
+
+  .en{
+    border-radius: 10%; 
+  font-size: 30px;
+  color: black;
+  font-family:Noto Mono;
+  background-color:#b1cbbb;
+
+  }
+  
+  #ed{
+  font-size: 20px;
+	 margin-left: 10%;
+   font-family:Noto Mono;
+   color: black;
+   background-color:#b1cbbb;
+  border-radius:20px;
+    box-shadow:6px 5px black;
+  transition: background-color;
+  }
+  
+ 
+
+  
+</style>
+
+  <script>
+
+    function inclui() {
+      
+      $.get("https://clienteweb2017.000webhostapp.com/crud_ajax_json/createProduto.php?id="+parseInt($('#inc #Id').val())+"&nome="+$('#inc #Nome').val()+"&descricao="+$('#inc #Descricao').val()+"&preco="+parseFloat($('#inc #Preco').val())+"&qtdestoque="+parseInt($('#inc #Estoque').val()))
+      loadDoc()
+      $("#inc").hide()
+    }
+
+
+    function exclui(idExclui) {
+      $.get("https://clienteweb2017.000webhostapp.com/crud_ajax_json/deleteProduto.php?id="+idExclui)
+      //abre a requisição passando o id do produto que se quer excluir como parametro
+      alert('deletado com sucesso')
+      TOTAL = -1 //volta com o total para -1 para q ele seja recalculado
+      loadDoc()
+    }
+
+    function loadDoc() {
+      console.log('load doc')
+      $('#Numero').html(PAG)//exibição do numero atual da página
+
+      $.get("https://clienteweb2017.000webhostapp.com/crud_ajax_json/getDadosProdutos.php?num_rec_per_page="+NUM+"&page="+PAG, function(data, status) {
+        exibe(JSON.parse(data))
+      })
+    }
+
+    function exibe(objJson) { //recebe o objeto objJson
+      console.log (objJson)
+      $("#Tabela").empty()
+      $("#Tabela").append("<th>id</th><th>nome</th><th>descrição</th><th>estoque</th><th>preço</th>")
+      var tabela = ""
+      var botao = ""
+      var parametros = ""
+      for(produto of objJson.data) { //para cada dado do objeto
+        parametros = produto.id+ ",\'"+produto.nome+"\',\'"+produto.descricao+"\',"+produto.qtdestoque+","+produto.preco; //prepara os parâmetros
+        botao = "<a href='#edit'><button id='ed' onclick=\"edita("+parametros+")\">Update</button></a>" //cria o botão update definindo que no click desse botao ele chamará a funcao "edita" passando os dados, incluindo o id, do produti que será editado
+        botao += "<button id='ed' onclick=\"exclui("+produto.id+")\">Delete</button>" //cria o botao delete
+        tabela ="<tr><td>"+produto.id+"</td><td>"+produto.nome+"</td><td>"+produto.descricao+"</td><td>"+produto.qtdestoque+"</td><td>"+produto.preco+"</td><td>"+botao+"</td></tr>"; //constroi a linha da tabela
+        $("#Tabela").append(tabela)
+      }//escreve a tabela
+      
+      if(TOTAL == -1) {
+        TOTAL = objJson.total
+      }
+    }
+
+    function edita(idEdita, nome, descricao, estoque, preco)//recebe os dados do produto como parâmetro
+    {
+      $("#edit").show()
+
+      //preenche os campos com os dados para serem editados
+      $('#Nome').val(nome)
+      $('#Descricao').val(descricao)
+      $('#Estoque').val(estoque)
+      $('#Preco').val(preco)
+
+      $('#botaoEnvia').on('click',function() {
+        var DADOS = "id="+idEdita+"&nome="+$('#Nome').val()+"&descricao="+$('#Descricao').val()+"&qtdestoque="+parseInt($('#Estoque').val())+"&preco="+parseFloat($('#Preco').val()) //configura os dados no formato da url
+        console.log(DADOS)
+        $.get("https://clienteweb2017.000webhostapp.com/crud_ajax_json/updateProduto.php?"+DADOS) //abre a requisição passando os dados novos como parametro
+        loadDoc()
+        $("#edit").hide()
+        $('#Nome').val("")
+        $('#Descricao').val("")
+        $('#Estoque').val("")
+        $('#Preco').val("")
+      })
+    }
+
+    $(document).ready(function(){
+
+      //inicializa as variáveis relacionada á paginação
+      TOTAL = -1
+      PAG = 1
+      NUM = 6
+      loadDoc()
+
+      $("#primeira").on("click",function (){
+        PAG=1
+        loadDoc()
+      })
+
+      $("#ultima").on("click",function (){
+        PAG = Math.ceil(TOTAL/NUM)
+        loadDoc()
+      })
+
+      $("#avanca").on("click",function (){
+        if(PAG < Math.ceil(TOTAL/NUM)) {
+          PAG++
+          loadDoc()
+        }
+        else {
+          alert('essa é a última página, não é possível avançar mais')
+        }
+      })
+
+      $("#volta").on("click",function (){
+        if(PAG==1)
+        {
+          alert('essa é a primeira página, não é possível voltar mais')
+        }
+        else {
+          PAG--
+          loadDoc()
+        }
+      })
+
+      $("#botaoInclui").on("click", function() {
+        $("#inc").show()
+      })
+    })
+  </script>
+
+</head>
+<body class="bd">
+
+<div id="Menu">
+<h1> CRUD Ent. <a class="casa" href="index.html" ><img class="casa" src="casa.png" > </a> </h1>
+<h3> PRODUTOS <button class="bu" id="at" onclick="loadDoc()">atualizar tabela</button> </h3>
+</div>
+
+  <button id = "botaoInclui" class="bu">incluir produto</button>
+
+
+<div id="conteudo1">
+<table id="Tabela"></table>
+
+
+<div id="edit">
+  <h3>Edite o produto:</h3>
+  nome:<br><input type="text" id="Nome">
+  <br>
+  descrição:<br><input type="text" id="Descricao">
+  <br>
+  quantidade em estoque:<br><input type="text" id="Estoque">
+  <br>
+  preco:<br><input type="text" id="Preco">
+  <br>
+  <button id='botaoEnvia'>editar</button>
+</div>
+
+<div id="inc">
+  <h3>Insira um novo produto:</h3>
+  id:<br><input type="text"  id="Id">
+  <br>
+  nome:<br><input type="text" id="Nome">
+  <br>
+  descrição:<br><input type="text" id="Descricao">
+  <br>
+  quantidade em estoque:<br><input type="text" id="Estoque">
+  <br>
+  preco:<br><input type="text" id="Preco">
+  <br>
+  <button class="en" onclick="inclui()">enviar</button>
+</div>
+</div>
+<div id="Paginacao">
+  <button id="primeira">primeira</button>
+  <button id="volta">voltar</button>
+  <spam id='Numero'></spam>
+  <button id="avanca">avançar</button>
+  <button id="ultima">última</button>
+</div>
+</body>
+</html>
